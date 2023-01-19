@@ -1,0 +1,30 @@
+<style>
+  body {
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #06004D;
+  }
+  .canv {
+    position: relative;
+  }
+  p {
+      position: absolute;
+      z-index: 10;
+      color: #FFDFB6;
+      left: 10px;
+      top: 10px;
+      margin: 0;
+      font-family: 'Courier New', Courier, monospace;
+    }
+</style>
+
+
+<div class="canv">
+  <p>
+    <span>Score </span> <span id="scoreEl">0</span>
+  </p>
+  <canvas></canvas>
+</div>
+<script src="./index.js"></script>
