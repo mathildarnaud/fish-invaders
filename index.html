@@ -5,9 +5,13 @@
     justify-content: center;
     align-items: center;
     background-color: #06004D;
+    flex-direction: column;
   }
+
   .canv {
     position: relative;
+    border: 1px dotted #FFDFB6;
+    padding: 10px;
   }
   p {
       position: absolute;
@@ -18,13 +22,69 @@
       margin: 0;
       font-family: 'Courier New', Courier, monospace;
     }
+    h1 {
+      display: flex;
+      justify-content: start;
+      align-items: center;
+      margin: 0;
+      font-family: 'Courier New', Courier, monospace;
+      /* font-size: 3vh; */
+      color: #FFDFB6;
+      margin: 2vh 0;
+    }
+    h3 {
+      /* position: absolute; */
+      z-index: 10;
+      color: #FFDFB6;
+      left: 10px;
+      top: 10px;
+      margin: 0;
+      font-size: 16px;
+      font-weight: 100;
+      font-family: 'Courier New', Courier, monospace;
+      margin-bottom: 9vh;
+    }
 </style>
 
 
-<div class="canv">
-  <p>
-    <span>Score </span> <span id="scoreEl">0</span>
-  </p>
-  <canvas></canvas>
-</div>
+<body>
+
+  <h1> Fish invaders !</h1>
+  <h3>Try to save your territory ...</h3>
+  <div class="canv">
+    <p>
+      <span>Score </span> <span id="scoreEl">0</span>
+      <br>
+      <br>
+      <span id="messageEl">...</span>
+    </p>
+    <audio id="audio" src="./img/fish-d.wav"></audio>
+    <audio id="audio2" src="./img/lose.wav"></audio>
+    <canvas></canvas>
+  </div>
+
+
+
+</body>
+<!-- <div class="section">
+  <div class="bluenavy">
+    <h1>Nice curves</h1>
+  </div>
+  <div class="blue">
+    <h1>Nice curves</h1>
+  </div>
+  <div class="darko">
+    <h1>Nice curves</h1>
+  </div>
+  <div class="medO">
+    <h1>Nice curves</h1>
+  </div>
+  <div class="lighto">
+    <h1>Nice curves</h1>
+  </div>
+  <div class="yellow">
+    <h1>Nice curves</h1>
+  </div>
+</div> -->
+
 <script src="./index.js"></script>

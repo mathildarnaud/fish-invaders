@@ -2,8 +2,45 @@ const scoreEl = document.querySelector('#scoreEl')
 const canvas = document.querySelector('canvas')
 const c = canvas.getContext('2d')
 
-canvas.width = 1024
-canvas.height = 576
+canvas.width = 1000
+canvas.height = 500
+
+window.requestAnimFrame = (function(){
+  return window.requestAnimationFrame ||
+          window.webkitRequestAnimationFrame ||
+          window.mozRequestAnimationFrame ||
+          function( callback ){
+            window.setTimeout(callback, 1000 / 60);
+          };
+  })();
+  //The initial angle is 0
+  let step = 0;
+  //Define the colors of three waves
+  let lines = ["rgba(6, 0, 77, 0.2)",
+                 "rgba(64, 30, 203, 0.2)",
+                 "rgba(121, 150, 236, 0.2)"];
+  function loop(){
+      c.clearRect(0,0,canvas.width,canvas.height);
+      step++;
+      //Draw 3 rectangles with different colors
+      for(let j = lines.length-1; j >= 0; j--) {
+          c.fillStyle = lines[j];
+          //The angle of each rectangle is different, the difference between each is 45 degrees
+          let angle = (step+j*45)*Math.PI/180;
+          let deltaHeight = Math.sin(angle) * 50;
+          let deltaHeightRight = Math.cos(angle) * 50;
+          c.beginPath();-
+          c.moveTo(0, canvas.height/2+deltaHeight);
+          c.bezierCurveTo(canvas.width /2, canvas.height/2+deltaHeight-50, canvas.width / 2, canvas.height/2+deltaHeightRight-50, canvas.width, canvas.height/2+deltaHeightRight);
+          c.lineTo(canvas.width, canvas.height);
+          c.lineTo(1, canvas.height);
+          c.lineTo(1, canvas.height/2+deltaHeight);
+          c.closePath();
+          c.fill();
+      }
+      requestAnimFrame(loop);
+  }
+  loop();
 
 class Player {
   constructor() {
@@ -280,25 +317,26 @@ let game = {
   active: true
 }
 let score = 0
-
-for (let i = 0; i < 100; i++) {
-  particules.push(
-    new Particule( {
-    position: {
-      x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height
-    },
-    velocity: {
-      x: 0,
-      y: 0.3
-    },
-    radius: Math.random() * 2,
-    color: '#7996EC'
-  }))
-}
+let myAudio = document.querySelector('#audio')
+let myAudio2 = document.querySelector('#audio2')
+// for (let i = 0; i < 100; i++) {
+//   particules.push(
+//     new Particule( {
+//     position: {
+//       x: Math.random() * canvas.width,
+//       y: Math.random() * canvas.height
+//     },
+//     velocity: {
+//       x: 0,
+//       y: 0.3
+//     },
+//     radius: Math.random() * 2,
+//     color: '#7996EC'
+//   }))
+// }
 
 function createParticules({object, color, fades}) {
-  for (let i = 0; i < 15; i++) {
+  for (let i = 0; i < 10; i++) {
     particules.push(
       new Particule( {
       position: {
@@ -319,7 +357,8 @@ function createParticules({object, color, fades}) {
 function animate() {
   if (!game.active) return
   requestAnimationFrame(animate)
-  c.fillStyle = '#06004D'
+  // c.fillStyle = '#06004D'
+  // c.globalAlpha = 0.0
   c.fillRect(0, 0, canvas.width, canvas.height)
   // invader.update()
   player.update()
@@ -356,6 +395,9 @@ function animate() {
       player.position.x + player.width
       ) {
         console.log('you lose')
+        // document.write("you lose");
+        messageEl.innerHTML = 'Oh no ... You lose'
+        myAudio2.play()
         setTimeout(() => {
           invaderProjectiles.splice(index, 1)
           player.opacity = 0
@@ -365,7 +407,7 @@ function animate() {
         setTimeout(() => {
           // game.active = false
           location.reload()
-        }, 2000);
+        }, 1000);
 
         createParticules({
           object: player,
@@ -425,11 +467,14 @@ function animate() {
               if (invaderFound && projectileFound) {
                 score += 100
                 scoreEl.innerHTML = score
-              createParticules({
-                object: invader,
-                color: '#FC5426',
-                fades: true
-              })
+                messageEl.innerHTML = 'Nice shoot !'
+
+                myAudio.play()
+              // createParticules({
+              //   object: invader,
+              //   color: '#FC5426',
+              //   fades: true
+              // })
 
                 grid.invaders.splice(i, 1)
                 projectiles.splice(j, 1)
@@ -447,6 +492,9 @@ function animate() {
                 } else {
                   grids.splice(gridIndex, 1)
                 }
+              } else {
+                messageEl.innerHTML = 'Try to shoot a fish'
+
               }
             }, 0)
         }
@@ -530,3 +578,9 @@ addEventListener('keyup', ({key}) => {
     }
   }
 )
+
+
+window.addEventListener('resize', ()=>{
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+})
